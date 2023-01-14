@@ -1,48 +1,60 @@
 import numpy as np
 import math
+import collections
 
 
 
 GOAL_STATE = [1,2,3,4,5,6,7,8,0]
 founded = False
-max_depht = 20
+max_depht = 500
 
-Ans = None
 
-def DFS(sample, hashtable = None,records = None,depht = 0):
+def BFS(sample):
     global max_depht
     global founded
-    global Ans
 
-    if hashtable == None:
-        hashtable = HashTable()
-    if records == None:
-        records = []
-    
-    depht += 1
-    if depht > max_depht:
-        return None
-    
+    hashtable = HashTable()
     hashtable.hash(sample)
+    actionNode = ActionNode(None)
+    queue = collections.deque([(sample,actionNode)])
+    depht = 0
     action = None
-    for next in nextSamples(sample).values():
 
-        for key in nextSamples(sample).keys():
-            if nextSamples(sample)[key] == next:
-                action = key
-                
-        if not hashtable.check(next):   
-            records.append(action)
-            if next == GOAL_STATE:
-                founded = True
-                Ans = records.copy()
-                return records
-            
-            DFS(next, hashtable,records,depht)
-            records.pop()
-            if founded:
-                break
+    while queue:
+
+        depht += 1
+        if depht > max_depht:
+            print('Depht limit')
+            return None
+
+        sample,actionNode = queue.popleft()
+
+        for next in nextSamples(sample).values():
+            for key in nextSamples(sample).keys():
+                if nextSamples(sample)[key] == next:
+                    action = key
+
+            nextAction = ActionNode(action)
+            nextAction.parent = actionNode
+
+            if not hashtable.check(next):
+                if next == GOAL_STATE:
+                    records = printActions(nextAction)
+                    founded = True
+                    print('founded')
+                    return records
+
+                queue.append((next,nextAction))
+                hashtable.hash(next)
     
+
+def printActions(actionNode):
+    actions = []
+    while actionNode.parent != None:
+        actions.append(actionNode.action)
+        actionNode = actionNode.parent
+    actions.reverse()
+    return actions
 
 def nextSamples(sample):
     nexts = {}
@@ -69,6 +81,12 @@ def nextSamples(sample):
     return nexts
 
 
+class ActionNode:
+    def __init__(self, action):
+        self.action = action
+        self.parent = None
+    def setParent(self, parent):
+        self.parent = parent
 
 
 class HashTable:
@@ -90,5 +108,5 @@ class HashTable:
         return self.table[intger] == 1
 
 if __name__ == "__main__":
-    records = DFS([1,2,3,0,7,6,5,4,8])
-    print(Ans)
+    records = BFS([1,2,3,0,7,6,5,4,8])
+    print(records)
