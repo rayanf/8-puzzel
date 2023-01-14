@@ -6,10 +6,10 @@ import collections
 
 GOAL_STATE = [1,2,3,4,5,6,7,8,0]
 founded = False
-max_depht = 20
+max_depht = 500
 
 
-def BFS(sample):
+def UCS(sample):
     global max_depht
     global founded
 
@@ -25,7 +25,6 @@ def BFS(sample):
         if cost > max_depht:
             print('Depht limit')
             return None
-
 
         for next in nextSamples(sample).values():
             for key in nextSamples(sample).keys():
@@ -43,6 +42,8 @@ def BFS(sample):
                     return records
 
                 queue.append((next,nextAction,cost+1))
+                sorted(queue, key=lambda x: x[2])
+                
                 hashtable.hash(next)
     
 
@@ -106,5 +107,5 @@ class HashTable:
         return self.table[intger] == 1
 
 if __name__ == "__main__":
-    records = BFS([1,2,3,0,7,6,5,4,8])
+    records = UCS([1,2,3,0,7,6,5,4,8])
     print(records)
