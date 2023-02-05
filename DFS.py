@@ -5,7 +5,7 @@ import math
 
 GOAL_STATE = [1,2,3,4,5,6,7,8,0]
 founded = False
-max_depht = 20
+max_depht = 50
 
 Ans = None
 
@@ -89,6 +89,19 @@ class HashTable:
         intger = int(string)
         return self.table[intger] == 1
 
+
+def dfsMain(sample,max_dephtt):
+    global Ans
+    global founded
+    global max_depht
+    max_depht = max_dephtt
+    founded = False
+    Ans = None
+    records = DFS(sample)
+    return(Ans)    
+
 if __name__ == "__main__":
+
+    # print(dfsMain([1,2,3,4,5,6,7,8,0],50))
     records = DFS([1,2,3,0,7,6,5,4,8])
     print(Ans)

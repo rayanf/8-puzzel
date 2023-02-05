@@ -6,7 +6,7 @@ import collections
 
 GOAL_STATE = [1,2,3,4,5,6,7,8,0]
 founded = False
-max_depht = 500
+max_depht = 100
 
 
 def Astar(sample):
@@ -22,9 +22,8 @@ def Astar(sample):
 
     while queue:
         sample,actionNode,cost = queue.popleft()
-        print(cost)
+        # print(cost)
         if cost > max_depht:
-            print('Depht limit')
             return None
 
         for next in nextSamples(sample).values():
@@ -39,7 +38,6 @@ def Astar(sample):
                 if next == GOAL_STATE:
                     records = printActions(nextAction)
                     founded = True
-                    print('founded')
                     return records
 
                 queue.append((next,nextAction,cost+h(next)))
@@ -118,8 +116,17 @@ class HashTable:
         intger = int(string)
         return self.table[intger] == 1
 
+
+def aStarMain(saample, max_dephtt):
+    global founded
+    global max_depht
+    founded = False
+    max_depht = max_dephtt
+    records = Astar(saample)
+    return records
+
 if __name__ == "__main__":
     records = Astar([1,2,3,0,7,6,5,4,8])
-    # records = Astar([1,2,3,4,5,6,7,0,8])
+
     print(records)
 

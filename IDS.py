@@ -96,6 +96,15 @@ class HashTable:
             string += str(i)
         intger = int(string)
         return self.table[intger] == 1
+def idsMain(sample,max_dephtt):
+    global Ans
+    global founded
+    global max_depht
+    max_depht = max_dephtt
+    founded = False
+    Ans = None
+    IDS(sample)
+    return Ans
 
 if __name__ == "__main__":
     records = IDS([1,2,3,0,7,6,5,4,8])

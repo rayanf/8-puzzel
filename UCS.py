@@ -23,7 +23,6 @@ def UCS(sample):
     while queue:
         sample,actionNode,cost = queue.popleft()
         if cost > max_depht:
-            print('Depht limit')
             return None
 
         for next in nextSamples(sample).values():
@@ -38,7 +37,6 @@ def UCS(sample):
                 if next == GOAL_STATE:
                     records = printActions(nextAction)
                     founded = True
-                    print('founded')
                     return records
 
                 queue.append((next,nextAction,cost+1))
@@ -106,6 +104,16 @@ class HashTable:
         intger = int(string)
         return self.table[intger] == 1
 
+
+def ucsMain(sample,max_dephtt):
+    global max_depht
+    global founded
+    founded = False
+    max_depht = max_dephtt
+
+    records = UCS(sample)
+    return records
+    
 if __name__ == "__main__":
     records = UCS([1,2,3,0,7,6,5,4,8])
     print(records)

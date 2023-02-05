@@ -23,7 +23,6 @@ def BFS(sample):
     while queue:
         sample,actionNode,cost = queue.popleft()
         if cost > max_depht:
-            print('Depht limit')
             return None
 
 
@@ -39,7 +38,6 @@ def BFS(sample):
                 if next == GOAL_STATE:
                     records = printActions(nextAction)
                     founded = True
-                    print('founded')
                     return records
 
                 queue.append((next,nextAction,cost+1))
@@ -105,6 +103,14 @@ class HashTable:
         intger = int(string)
         return self.table[intger] == 1
 
+def bfsMain(sample,max_dephtt):
+    global founded
+    global max_depht
+    founded = False
+    max_depht = max_dephtt
+    records = BFS(sample)
+    return records
+    
 if __name__ == "__main__":
     records = BFS([1,2,3,0,7,6,5,4,8])
     print(records)
