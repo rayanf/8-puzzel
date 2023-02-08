@@ -3,7 +3,6 @@ import math
 import collections
 
 
-
 GOAL_STATE = [1,2,3,4,5,6,7,8,0]
 founded = False
 max_depht = 20

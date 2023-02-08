@@ -9,6 +9,7 @@ max_depht = 20
 
 Ans = None
 
+# function to search for answer with increasing maximum depht
 def IDS(sample):
     global max_depht
     for d in range(max_depht):

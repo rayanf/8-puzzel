@@ -18,20 +18,22 @@ def process_memory():
     return mem_info.rss
  
  
-def profile(func):
-    global exeMem
-    def wrapper(*args, **kwargs):
+# def profile(func):
+#     global exeMem
+#     def wrapper(*args, **kwargs):
  
-        mem_before = process_memory()
-        result = func(*args, **kwargs)
-        mem_after = process_memory()
-        exeMem = (mem_after - mem_before)
+#         mem_before = process_memory()
+#         result = func(*args, **kwargs)
+#         mem_after = process_memory()
+#         exeMem = (mem_after - mem_before)
  
-        return result
-    return wrapper
+#         return result
+#     return wrapper
  
 
-@profile
+# @profile
+
+# this function gets search algorithm and sample and returns the answer's actions if found
 def findAns(alg,sample):
     max_depht = 50
     if alg == 'DFS':
@@ -47,45 +49,69 @@ def findAns(alg,sample):
     return record
 
 
+# main function
 def main():
     examples = readExamples()
     global exeMem
 
-    data = pd.DataFrame(columns=['DFSTime', 'DFSMemory', 'BFSTime', 'BFSMemory', 'IDSTime', 'IDSMemory', 'UCSTime', 'UCSMemory', 'AstarTime', 'AstarMemory'])
+    # list of algorithms strings to save in data frame
+    algorithms = ['DFS', 'BFS', 'IDS', 'UCS', 'Astar']
+   
+    # data frame to save and compare results with each algorithm time and memory
+    data = pd.DataFrame(columns=['DFSTime', 'DFSMemory', 'BFSTime', 'BFSMemory', 'IDSTime', 'IDSMemory', 'UCSTime', 'UCSMemory', 'AstarTime', 'AstarMemory']) 
+    
+    # data frame for answers with each algorithm for each sample
+    answers = pd.DataFrame(columns=['DFS', 'BFS', 'IDS', 'UCS', 'Astar'])
+    for i, sample in enumerate(examples[:2]):
+        # solution actions with each algorithm for each sample
+        actions = {}
+        
+        # memory and time with each algorithm for each sample
+        timesMem = {}
 
-    with open('results.txt', 'w') as f:
-        algorithms = ['DFS', 'BFS', 'IDS', 'UCS', 'Astar']
-        for i, sample in enumerate(examples[:2]):
-            timesMem = {}
-            foundedd = False
-            for alg in algorithms:
-                print(f'{alg} {i+1}')
-                startTime = time.time()
-                # startMem = process_memory()
-                record = findAns(alg,sample)
-                # exeMem = process_memory() - startMem
-                exeTime = time.time() - startTime
-                algTime = alg+'Time'
-                algMem = alg+'Memory'
-                
-                if record != None:
-                    timesMem[algTime] = round(exeTime,3)
-                    timesMem[algMem] = exeMem
-                else:
-                    timesMem[algTime] = np.nan
-                    timesMem[algMem] = np.nan
-                
-                if record != None and not foundedd:
-                    foundedd = True
-                    f.write(f'{record}\n')
-            dfTemp = pd.DataFrame(timesMem, index=[0])
-            data = pd.concat([data, dfTemp], axis=0)
+        for alg in algorithms:
+            print(f'{alg} {i+1}')
+            # set start time to track execution time
+            startTime = time.time()
 
+            # set start memory to track memory usage
+            startMem = process_memory()
+
+
+            #find answer with each algorithm   
+            record = findAns(alg,sample)
+            
+            # set end memory to track memory usage
+            exeMem = process_memory() - startMem
+
+            # set end time to track execution time
+            exeTime = time.time() - startTime
+            
+            
+            algTime = alg+'Time'
+            algMem = alg+'Memory'
+            
+            # if answer found save time and memory
+            # else save nan
+            if record != None:
+                timesMem[algTime] = round(exeTime,3)
+                timesMem[algMem] = exeMem
+            else:
+                timesMem[algTime] = np.nan
+                timesMem[algMem] = np.nan
+            
+            actions[alg] = record
+        answers = pd.concat([answers, pd.DataFrame(actions)], axis=0)
+        dfTemp = pd.DataFrame(timesMem, index=[0])
+        data = pd.concat([data, dfTemp], axis=0)
+
+    # save data frame as CSV file
     data = data.reindex(columns=['DFSTime', 'BFSTime', 'IDSTime', 'UCSTime', 'AstarTime', 'DFSMemory', 'BFSMemory', 'IDSMemory', 'UCSMemory', 'AstarMemory'])
     data.to_csv('results.csv', index=False)
 
 
 
+# read samples from file
 def readExamples():
     examples = []
     with open('examples.txt') as f:
@@ -100,8 +126,3 @@ def readExamples():
 
 if __name__ == "__main__":
     main()
-    # data = pd.read_csv('results.csv')
-    # print(data)
-    # showSample([1,2,3,4,5,6,7,8,0])
-
-
