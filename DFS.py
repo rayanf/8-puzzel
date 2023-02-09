@@ -103,5 +103,5 @@ def dfsMain(sample,max_dephtt):
 if __name__ == "__main__":
 
     # print(dfsMain([1,2,3,4,5,6,7,8,0],50))
-    records = DFS([1,2,3,0,7,6,5,4,8])
+    records = DFS([0,1,3,4,2,5,7,8,6])
     print(Ans)

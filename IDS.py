@@ -12,7 +12,7 @@ Ans = None
 # function to search for answer with increasing maximum depht
 def IDS(sample):
     global max_depht
-    for d in range(max_depht):
+    for d in range(0,max_depht,5):
         ans = DFS(sample,d)
         if ans != None:
             break
@@ -108,5 +108,5 @@ def idsMain(sample,max_dephtt):
     return Ans
 
 if __name__ == "__main__":
-    records = IDS([1,2,3,0,7,6,5,4,8])
+    records = IDS([0,1,3,4,2,5,7,8,6])
     print(Ans)

@@ -142,7 +142,7 @@ def aStarMain(saample, max_dephtt):
     return records
 
 if __name__ == "__main__":
-    records = Astar([1,2,3,0,7,6,5,4,8])
+    records = Astar([0,1,3,4,2,5,7,8,6])
 
     print(records)
 
